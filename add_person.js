@@ -12,15 +12,14 @@ const knex = require('knex')({
   }
 });
 
-const args = process.argv[2];
+const args = {
+  first_name: process.argv[2],
+  last_name: process.argv[3],
+  birthdate: process.argv[4]
+};
 
-knex.select('first_name', 'last_name', 'birthdate')
-  .from('famous_people')
-  .where(`first_name`, `${args}`)
-  .orWhere(`last_name`, `${args}`)
-  .then(function(rows) {
-  console.log(rows[0].first_name + " " + rows[0].last_name + ", born " + rows[0].birthdate);
-  })
+knex('famous_people')
+  .insert(args)
   .then(function () {
     return knex.destroy();
   });
